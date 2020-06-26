@@ -21,17 +21,14 @@
 # Autor: Hélio Giroto
 
 
-# 
-cd ~/album
-
-# Deleta todos fotos antigas que são iguais:
-rm $(ls | grep '^[0-9]')  
+# Deleta todos fotos antigas do album que são iguais:
+rm ./album/[0-9]*
 
 # espera 3 segundos para tirar a primeira foto:
 sleep 3
 
 # tira primeira foto:
-fswebcam -q --png -1 0.png
+fswebcam -q --png -1 ./album/0.png
 
 # sufixo recebe 1 (para nome do arq.png):
 sufixo=1
@@ -49,11 +46,11 @@ do
 	foto_ant=$((sufixo-1)).png
 
 	# Tira uma foto que receberá o nome de foto atual:
-	fswebcam -q --png -1 $foto_atual
+	fswebcam -q --png -1 ./album/$foto_atual
 	
 	# compara as duas fotos e define variável tolerancia.
 	# caso as 2 fotos sejam iguais recebe valor 0, senão receberá outro valor diferente:
-	tolerancia=$(compare -fuzz 50% -quiet -metric ae $foto_atual $foto_ant null: 2>&1)
+	tolerancia=$(compare -fuzz 50% -quiet -metric ae ./album/$foto_atual ./album/$foto_ant null: 2>&1)
 
 	# Verifica a tolerancia:
 	if [[ $tolerancia -ne 0 ]] 
