@@ -61,10 +61,13 @@ do
 		# cvlc --play-and-exit ~/beep.mp3		# sudo apt install vlc-bin
 		# tee DETECT_$foto_atual ~/Dropbox/$foto_atual < $foto_atual &> /dev/null
 
+		# variavel momento recebe a data e hora:
+		momento=$(date)
+
 		# modifica o album.json:
 		# addiciona, commita e faz push para github:
 		git add .
-		git commit 
+		git commit -m "${momento}"
 		git push
 
 	fi
