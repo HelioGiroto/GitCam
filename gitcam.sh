@@ -62,7 +62,7 @@ do
 		momento=$(date)
 
 		# modifica o album.json:
-		# addiciona, commita e faz push para github: 
+		# addiciona, commita e faz push para github:
 		git add .
 		git commit -m "${momento}"
 		git push
