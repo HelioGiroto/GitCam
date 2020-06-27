@@ -41,7 +41,7 @@ PROX_FOTO=$((PRIMEIRA_FOTO+1))
 # laço infinito:
 while :
 do
-	# intervalo de um segundo:
+	# intervalo de um segundo para tirar uma nova foto:
 	sleep 1
 
 	# nome que será dado a foto atual:
@@ -70,7 +70,7 @@ do
 		# variavel momento recebe a data e hora:
 		momento=$(date)
 
-		# modifica o album.json:
+		# modifica (appenda) o album.json (PARA DAR ALERTA NO APP PWA DO CELULAR DO USUÁRIO):
 
 		# addiciona, commita e faz push para github:
 		git add .
