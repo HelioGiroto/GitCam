@@ -20,18 +20,23 @@
 
 # Autor: Hélio Giroto
 
+# Só para garantir que tenha ao menos uma foto nesta pasta local:
+touch ~/album/0.png
 
-# Deleta todos fotos antigas do album que são iguais:
-rm ./album/[0-9]*
+# Nro (nome) da última foto tomada e salva na pasta local album:
+ULTIMA_FOTO=$(ls ~/album | sort -n | tail -n1 | sed 's/\.png//')
+
+# Define o nome da primeira foto que será tomada:
+PRIMEIRA_FOTO=$((ULTIMA_FOTO+1))
 
 # espera 3 segundos para tirar a primeira foto:
 sleep 3
 
 # tira primeira foto:
-fswebcam -q --png -1 ./album/0.png
+fswebcam -q --png -1 ~/album/${PRIMEIRA_FOTO}.png
 
-# sufixo recebe 1 (para nome do arq.png):
-sufixo=1
+# PROX_FOTO recebe 1 (para nome do arq.png):
+PROX_FOTO=$((PRIMEIRA_FOTO+1))
 
 # laço infinito:
 while :
@@ -40,28 +45,33 @@ do
 	sleep 1
 
 	# nome que será dado a foto atual:
-	foto_atual=$sufixo.png
+	FOTO_ATUAL=$PROX_FOTO.png
 
 	# nome da foto anterior:
-	foto_ant=$((sufixo-1)).png
+	FOTO_ANT=$((PROX_FOTO-1)).png
 
 	# Tira uma foto que receberá o nome de foto atual:
-	fswebcam -q --png -1 ./album/$foto_atual
+	fswebcam -q --png -1 ~/album/$FOTO_ATUAL
 	
 	# compara as duas fotos e define variável tolerancia.
 	# caso as 2 fotos sejam iguais recebe valor 0, senão receberá outro valor diferente:
-	tolerancia=$(compare -fuzz 50% -quiet -metric ae ./album/$foto_atual ./album/$foto_ant null: 2>&1)
+	tolerancia=$(compare -fuzz 50% -quiet -metric ae ~/album/$FOTO_ATUAL ~/album/$FOTO_ANT null: 2>&1)
 
 	# Verifica a tolerancia:
-	if [[ $tolerancia -ne 0 ]] 
+	if [[ $tolerancia -ne 0 ]]
 	then
 		# cvlc --play-and-exit ~/beep.mp3		# sudo apt install vlc-bin
-		# tee DETECT_$foto_atual ~/Dropbox/$foto_atual < $foto_atual &> /dev/null
+		# tee DETECT_$FOTO_ATUAL ~/Dropbox/$FOTO_ATUAL < $FOTO_ATUAL &> /dev/null
+
+
+		# copia foto atual para a pasta album do gitcam:
+		cp ~/album/$FOTO_ATUAL ./album/$FOTO_ATUAL
 
 		# variavel momento recebe a data e hora:
 		momento=$(date)
 
 		# modifica o album.json:
+
 		# addiciona, commita e faz push para github:
 		git add .
 		git commit -m "${momento}"
@@ -69,8 +79,8 @@ do
 
 	fi
 
-	# acrescenta mais 1 à variavel sufixo:
-	sufixo=$((sufixo+1))
+	# acrescenta mais 1 à variavel PROX_FOTO:
+	PROX_FOTO=$((PROX_FOTO+1))
 done
 
 
