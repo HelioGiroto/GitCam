@@ -21,6 +21,7 @@
 * O script install.sh fará que se faça 'git push' automaticamente sem operação manual. Mas para resetar isso é preciso deixar vazios os arquivos ~/.git-credentials e ~/.gitconfig ou pelo menos comentar as seguintes linhas:
 
 	\# echo "" > ~/.git-credentials
+
 	\# sed 's/\[credential\]/#&/; s/        helper/#&/' ~/.gitconfig
 
 
